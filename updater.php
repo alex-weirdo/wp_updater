@@ -10,7 +10,7 @@ Author: AS
 // it's for update
 if ( class_exists(AS_UPDATER::class) ) {
 	$TARGET_DIR = __DIR__;
-	$slug = "TheUpdater";
+	$slug = "WP_Updater";
 	$BRANCH = 'master';
 	$TARGET_NAME = 'archive';
 	new AS_UPDATER($TARGET_DIR, $slug, $REMOTE_SSH, $BRANCH, $TARGET_NAME);
