@@ -22,13 +22,13 @@ class AS_UPDATER
 	public $ERROR;
 
 
-	public function __construct($TARGET_DIR, $slug, $REMOTE_SSH, $BRANCH, $TARGET_NAME)
+	public function __construct($TARGET_DIR, $slug, $BRANCH, $TARGET_NAME)
 	{
 		$this->TARGET_DIR = $TARGET_DIR;
 		$this->slug = $slug;
-		$this->REMOTE_SSH = $REMOTE_SSH;
 		$this->BRANCH = $BRANCH;
 		$this->TARGET_NAME = $TARGET_NAME;
+		$this->getRepository();
 
 		add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
 		add_action('admin_init', array($this, 'onAdminInit'));
@@ -41,6 +41,13 @@ class AS_UPDATER
 			wp_enqueue_script('updater_script', plugins_url('js/script.js', __FILE__), array('jquery'), '1.0.7');
 			wp_enqueue_style('updater_style', plugins_url('css/style.css', __FILE__));
 		}
+	}
+
+	public function getRepository() {
+		$exec = exec("cd $this->TARGET_DIR && git remote -v");
+		$repository = explode(' ', explode("\t", $exec)[1])[0];	// fetch
+		$this->REMOTE_SSH = $repository;
+		return $this->REMOTE_SSH;
 	}
 
 	/**
